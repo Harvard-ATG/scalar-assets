@@ -2,7 +2,7 @@
 	"use strict";
 
 	function main() {
-		console.log("colorize", window.location.pathname);
+		console.log("colorize activated", window.location.pathname);
 	}
 
 	if(typeof $ === "undefined") {
