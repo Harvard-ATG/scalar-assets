@@ -100,7 +100,8 @@ $( document ).ready( function() {
 			console.log("Scalar API book url - default book and page");
 			// pageSlug = "russian-test-2"
 			// scalarapi.setBook( "https://scalar.fas.harvard.edu/cole---test-book" );
-			scalarapi.setBook("https://scalar.fas.harvard.edu/foundationsofrussian");
+			var defaultBookUrl = "https://scalar.fas.harvard.edu/foundationsofrussian";
+			scalarapi.setBook(defaultBookUrl);
 			var pageSlug = "cole---test-page";
 			var pageUri = "https://scalar.fas.harvard.edu/foundationsofrussian/cole---test-page";
 		}
@@ -118,16 +119,26 @@ $( document ).ready( function() {
 
 		function getScalarNode(nodeSlug, callback){
 			console.log("getting scalar node");
-			const node = scalarapi.getNode(pageUri);
+			var scalar_api_json_uri = pageUri + ".rdfjson";
+			console.log(scalar_api_json_uri);
+			$.getJSON(scalar_api_json_uri, function(data){
+				console.log("Got Scalar data!");
+				console.log(data);
+				let latest = data[pageUri]["http://scalar.usc.edu/2012/01/scalar-ns#version"][0].value;
+				let node = data[latest];
+				let content = node["http://rdfs.org/sioc/ns#content"][0].value;
+				callback(content);
+			})
+			// const node = scalarapi.getNode(pageUri);
 			//const node = scalarapi.getNode(pageSlug);
 
-			setTimeout(function(){
-				console.log("Got Scalar node");
-				console.log(node);
-				// let content = node.versions[0].content;
-	      let content = node.current.content;
-				callback(content);
-			}, 1000);
+			// setTimeout(function(){
+			// 	console.log("Got Scalar node");
+			// 	console.log(node);
+			// 	// let content = node.versions[0].content;
+	    //   let content = node.current.content;
+			// 	callback(content);
+			// }, 1000);
 		}
 
 		function processHtml(content, callback){
