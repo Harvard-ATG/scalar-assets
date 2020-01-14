@@ -92,14 +92,17 @@ $( document ).ready( function() {
 		console.log(pageSlug);
 
 		if(bookUrl.includes("scalar.fas.harvard.edu")){
-			console.log(`Scalar API book url set to ${bookUrl}`);
-			scalarapi.setBook(bookUrl);
+			//console.log(`Scalar API book url set to ${bookUrl}`);
+			console.log("Scalae API book url set to https://scalar.fas.harvard.edu/foundationsofrussian/");
+			//scalarapi.setBook(bookUrl);
+			scalarapi.setBook("https://scalar.fas.harvard.edu/foundationsofrussian");
 		} else {
 			console.log("Scalar API book url - default book and page");
 			// pageSlug = "russian-test-2"
 			// scalarapi.setBook( "https://scalar.fas.harvard.edu/cole---test-book" );
 			scalarapi.setBook("https://scalar.fas.harvard.edu/foundationsofrussian");
-			pageSlug = "cole---test-page";
+			var pageSlug = "cole---test-page";
+			var pageUri = "https://scalar.fas.harvard.edu/foundationsofrussian/cole---test-page";
 		}
 
 		if ( scalarapi.loadNode( pageSlug, true, handleSuccess, handleFailure) == "loaded" ) {
@@ -115,7 +118,8 @@ $( document ).ready( function() {
 
 		function getScalarNode(nodeSlug, callback){
 			console.log("getting scalar node");
-			const node = scalarapi.getNode(pageSlug);
+			const node = scalarapi.getNode(pageUri);
+			//const node = scalarapi.getNode(pageSlug);
 
 			setTimeout(function(){
 				console.log("Got Scalar node");
