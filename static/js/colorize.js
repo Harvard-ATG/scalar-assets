@@ -96,6 +96,7 @@ $( document ).ready( function() {
 			console.log("Scalae API book url set to https://scalar.fas.harvard.edu/foundationsofrussian/");
 			//scalarapi.setBook(bookUrl);
 			scalarapi.setBook("https://scalar.fas.harvard.edu/foundationsofrussian");
+			var pageUri = bookUrl;
 		} else {
 			console.log("Scalar API book url - default book and page");
 			// pageSlug = "russian-test-2"
