@@ -13,7 +13,7 @@
 	}
 
 $( document ).ready( function() {
-	$('body').on('pageLoadComplete',function() {
+	// $('body').on('pageLoadComplete',function() {
 		var url = window.location.href;
 		var pageSlug = window.location.pathname.split("/").pop();
 		console.log(url);
@@ -21,7 +21,8 @@ $( document ).ready( function() {
 
 		function getScalarNode(nodeSlug, callback){
 			console.log("getting scalar node");
-			var scalar_api_json_uri = pageUri + ".rdfjson";
+			// var scalar_api_json_uri = pageUri + ".rdfjson";
+			var scalar_api_json_uri = url + ".rdfjson";
 			console.log(scalar_api_json_uri);
 			$.getJSON(scalar_api_json_uri, function(data){
 				console.log("Got Scalar data!");
@@ -45,7 +46,7 @@ $( document ).ready( function() {
 		getScalarNode(pageSlug, processHtml);
 
 
-	})
+	// })
 });
 
 		// if(bookUrl.includes("scalar.fas.harvard.edu")){
@@ -75,14 +76,14 @@ $( document ).ready( function() {
 		// // 		.then(swapHtml())
 		// // }
 
-		function processHtml(content, callback){
-			console.log("process html");
-			const output_html = colorizehtml(content).then(function(response){
-				console.log("colorized");
-        console.log(response);
-				$( "span[property='sioc:content']" ).html(response);
-      });
-		}
+		// function processHtml(content, callback){
+		// 	console.log("process html");
+		// 	const output_html = colorizehtml(content).then(function(response){
+		// 		console.log("colorized");
+    //     console.log(response);
+		// 		$( "span[property='sioc:content']" ).html(response);
+    //   });
+		// }
 
 		// function swapHtml(html){
 		// 	console.log("swap");
@@ -165,6 +166,6 @@ $( document ).ready( function() {
 			console.log("The node could not be loaded. Colorization failed.")
 		}
 	// });
-});
+// });
 
 })(window, jQuery);
