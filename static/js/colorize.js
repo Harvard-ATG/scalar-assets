@@ -27,7 +27,7 @@ $( document ).ready( function() {
 			$.getJSON(scalar_api_json_uri, function(data){
 				console.log("Got Scalar data!");
 				console.log(data);
-				let latest = data[pageUri]["http://scalar.usc.edu/2012/01/scalar-ns#version"][0].value;
+				let latest = data[url]["http://scalar.usc.edu/2012/01/scalar-ns#version"][0].value;
 				let node = data[latest];
 				let content = node["http://rdfs.org/sioc/ns#content"][0].value;
 				callback(content);
