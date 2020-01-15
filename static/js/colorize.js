@@ -61,10 +61,10 @@ $( document ).ready( function() {
 			$(tooltip).insertAfter(".ru-toggle");
       $(".ru-toggle").click(toggleColorization);
 			$(".ru-toggle").mouseover(function(){
-				$("#tooltip").toggle();
+				$("#colorize_tooltip").toggle();
 			})
 			$(".ru-toggle").mouseout(function(){
-				$("#tooltip").toggle();
+				$("#colorize_tooltip").toggle();
 			})
     }
 
