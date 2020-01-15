@@ -23,7 +23,7 @@ $( document ).ready( function() {
     getScalarNode(pageSlug, processHtml);
 
 		function getScalarNode(nodeSlug, callback){
-			console.log("getting scalar node");
+			// console.log("getting scalar node");
 			// var scalar_api_json_uri = pageUri + ".rdfjson";
 			var scalar_api_json_uri = url + ".rdfjson";
 			// console.log(scalar_api_json_uri);
@@ -38,7 +38,7 @@ $( document ).ready( function() {
 		}
 
 		function processHtml(content){
-			console.log("process html");
+			// console.log("process html");
 			colorizehtml(raw_content).then(function(response){
 				// console.log("colorized");
 				// console.log(response);
@@ -53,8 +53,11 @@ $( document ).ready( function() {
 
     function createToggleButton(colorize_text=true){
       var ru_toggle = `<img class="ru-toggle" title="" data-toggle="popover" data-colorize="${colorize_text}"data-placement="bottom" src="https://harvard-atg.github.io/scalar-assets/static/img/ru_flag_round_250.png" alt="Russian colorize toggle">`;
-			var tooltip = `<div class="popover caption_font fade left in" role="tooltip" id="colorize_tooltip" style="">Toggle Colorization (Word Levels)</div>`
-      $("body").append(ru_toggle);
+			$("body").append(ru_toggle);
+			let toggle_position = $(".ru-toggle").position();
+
+			var tooltip = `<div class="popover caption_font fade left in" role="tooltip" id="colorize_tooltip" style="top:${toggle_position.top}; left:${toggle_position.left}">
+			<div class="arrow" style="top:50%"></div><h3 class="popover-title" style="display:none"></div><div class="popover-content">Toggle Colorization (Word Levels)</div></div>`
 			$(tooltip).insertAfter(".ru-toggle");
       $(".ru-toggle").click(toggleColorization);
 			$(".ru-toggle").mouseover(function(){
