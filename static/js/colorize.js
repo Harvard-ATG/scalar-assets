@@ -32,7 +32,7 @@ $( document ).ready( function() {
 				console.log(data);
 				let latest = data[url]["http://scalar.usc.edu/2012/01/scalar-ns#version"][0].value;
 				let node = data[latest];
-				const window.raw_content = node["http://rdfs.org/sioc/ns#content"][0].value;
+				var window.raw_content = node["http://rdfs.org/sioc/ns#content"][0].value;
 				callback(raw_content);
 			})
 		}
@@ -42,7 +42,7 @@ $( document ).ready( function() {
 			colorizehtml(raw_content).then(function(response){
 				console.log("colorized");
 				console.log(response);
-        const window.colorized_content = response;
+        var window.colorized_content = response;
 				if(colorize){
 					$( "span[property='sioc:content']" ).html(colorized_content);
 				}
@@ -52,7 +52,7 @@ $( document ).ready( function() {
 
 
     function createToggleButton(colorize_text=true){
-      var ru_toggle = `<img class="ru-toggle" title="" data-toggle="popover" data-colorize="${colorize_text}"data-placement="bottom" src="https://harvard-atg.github.io/scalar-assets/static/js/foundationsofrussian.colorize.js" alt="Russian colorize toggle">`;
+      var ru_toggle = `<img class="ru-toggle" title="" data-toggle="popover" data-colorize="${colorize_text}"data-placement="bottom" src="https://harvard-atg.github.io/scalar-assets/static/img/ru_flag_round_250.png" alt="Russian colorize toggle">`;
       $(body).append(ru_toggle);
       $(".ru-toggle").click(toggleColorization());
     }
