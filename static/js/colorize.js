@@ -54,7 +54,7 @@ $( document ).ready( function() {
     function createToggleButton(colorize_text=true){
       var ru_toggle = `<img class="ru-toggle" title="" data-toggle="popover" data-colorize="${colorize_text}"data-placement="bottom" src="https://harvard-atg.github.io/scalar-assets/static/img/ru_flag_round_250.png" alt="Russian colorize toggle">`;
       $("body").append(ru_toggle);
-      $(".ru-toggle").click(toggleColorization());
+      $(".ru-toggle").click(toggleColorization);
     }
 
 		function toggleColorization(){
