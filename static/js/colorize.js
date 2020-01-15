@@ -32,7 +32,7 @@ $( document ).ready( function() {
 				console.log(data);
 				let latest = data[url]["http://scalar.usc.edu/2012/01/scalar-ns#version"][0].value;
 				let node = data[latest];
-				var window.raw_content = node["http://rdfs.org/sioc/ns#content"][0].value;
+				window.raw_content = node["http://rdfs.org/sioc/ns#content"][0].value;
 				callback(raw_content);
 			})
 		}
@@ -42,7 +42,7 @@ $( document ).ready( function() {
 			colorizehtml(raw_content).then(function(response){
 				console.log("colorized");
 				console.log(response);
-        var window.colorized_content = response;
+        window.colorized_content = response;
 				if(colorize){
 					$( "span[property='sioc:content']" ).html(colorized_content);
 				}
