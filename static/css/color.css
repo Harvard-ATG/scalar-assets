@@ -21,10 +21,16 @@
 }
 .ru-toggle {
   right: 2.4rem;
-  top: 8rem;
+  top: 12rem;
   cursor: pointer;
   width: 3.2rem;
   position: fixed;
-  opacity: .25;
+  opacity: .75;
   vertical-align: middle;
+}
+.ru-toggle:hover {
+  opacity: 1;
+}
+#colorize-tooltop {
+  display:none;
 }
