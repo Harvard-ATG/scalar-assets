@@ -56,7 +56,7 @@ $( document ).ready( function() {
 			$("body").append(ru_toggle);
 			let toggle_position = $(".ru-toggle").position();
 
-			var tooltip = `<div class="popover caption_font fade left in" role="tooltip" id="colorize_tooltip" style="top:${toggle_position.top}; left:${toggle_position.left}">
+			var tooltip = `<div class="popover caption_font fade left in" role="tooltip" id="colorize_tooltip" style="top:${toggle_position.top - 4}px; left:${toggle_position.left - 250}px">
 			<div class="arrow" style="top:50%"></div><h3 class="popover-title" style="display:none"></h3><div class="popover-content">Toggle Colorization (Word Levels)</div></div>`
 			$(tooltip).insertAfter(".ru-toggle");
       $(".ru-toggle").click(toggleColorization);
