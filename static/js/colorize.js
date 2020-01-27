@@ -40,7 +40,7 @@ $( document ).ready( function() {
 
 		function processHtml(content){
 			// console.log("process html");
-			colorizehtml(raw_content).then(function(response){
+			colorizehtml(content).then(function(response){
 				// console.log("colorized");
 				// console.log(response);
         window.colorized_content = response;
