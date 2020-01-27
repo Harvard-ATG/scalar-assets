@@ -33,7 +33,7 @@ $( document ).ready( function() {
 				let latest = data[url]["http://scalar.usc.edu/2012/01/scalar-ns#version"][0].value;
 				let node = data[latest];
 				window.raw_content = node["http://rdfs.org/sioc/ns#content"][0].value;
-				window.raw_content_wrapped = $(raw_content).wrap("<div class="paragraph_wrapper"><div class="body_copy"></div></div>");
+				window.raw_content_wrapped = $(raw_content).wrap("<div class='paragraph_wrapper'><div class='body_copy'></div></div>");
 				callback(raw_content_wrapped);
 			})
 		}
