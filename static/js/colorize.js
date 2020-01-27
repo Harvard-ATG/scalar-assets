@@ -33,7 +33,9 @@ $( document ).ready( function() {
 				let latest = data[url]["http://scalar.usc.edu/2012/01/scalar-ns#version"][0].value;
 				let node = data[latest];
 				window.raw_content = node["http://rdfs.org/sioc/ns#content"][0].value;
-				window.raw_content_wrapped = $(raw_content).wrap("<div class='paragraph_wrapper'><div class='body_copy'></div></div>");
+				let prefix = "<div class="paragraph_wrapper"><div class="body_copy";
+				let suffix = "</div></div>"
+				window.raw_content_wrapped = `{prefix}{raw_content}{suffix}`;
 				console.log("raw content and raw_content_wrapped")
 				console.log(raw_content);
 				console.log(raw_content_wrapped);
