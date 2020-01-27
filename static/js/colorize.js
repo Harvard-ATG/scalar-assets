@@ -16,40 +16,25 @@ $( document ).ready( function() {
 	$('body').on('pageLoadComplete',function() {
 		var url = window.location.href;
 		var pageSlug = window.location.pathname.split("/").pop();
-		// console.log(url);
-		// console.log(pageSlug);
 		let colorize = true;
     createToggleButton(colorize);
     getScalarNode(pageSlug, processHtml);
 
 		function getScalarNode(nodeSlug, callback){
-			// console.log("getting scalar node");
-			// var scalar_api_json_uri = pageUri + ".rdfjson";
 			var scalar_api_json_uri = url + ".rdfjson";
-			// console.log(scalar_api_json_uri);
 			$.getJSON(scalar_api_json_uri, function(data){
-				// console.log("Got Scalar data!");
-				// console.log(data);
 				let latest = data[url]["http://scalar.usc.edu/2012/01/scalar-ns#version"][0].value;
 				let node = data[latest];
 				window.raw_content = node["http://rdfs.org/sioc/ns#content"][0].value;
 				let prefix = "<div class='paragraph_wrapper'><div class='body_copy'>";
 				let suffix = "</div></div>"
 				window.raw_content_wrapped = `${prefix}${raw_content}${suffix}`;
-				console.log("raw content and raw_content_wrapped")
-				console.log(raw_content);
-				console.log(raw_content_wrapped);
 				callback(raw_content_wrapped);
 			})
 		}
 
 		function processHtml(content){
-
-			console.log("process html");
-			console.log(content);
 			colorizehtml(content).then(function(response){
-				// console.log("colorized");
-				// console.log(response);
         window.colorized_content = response;
 				if(colorize){
 					$( "span[property='sioc:content']" ).html(colorized_content);
@@ -77,7 +62,6 @@ $( document ).ready( function() {
     }
 
 		function toggleColorization(){
-      console.log("Colorize toggled");
       if($(this).data("colorize") == true){
         $(this).data("colorize", false);
 				colorize = false;
