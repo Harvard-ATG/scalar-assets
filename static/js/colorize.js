@@ -81,7 +81,7 @@ $( document ).ready( function() {
       if($(this).data("colorize") == true){
         $(this).data("colorize", false);
 				colorize = false;
-        $( "span[property='sioc:content']" ).html(raw_content);
+        $( "span[property='sioc:content']" ).html(raw_content_wrapped);
 				$(".ru-toggle").css({"opacity": ".25"});
       } else {
         $(this).data("colorize", true);
