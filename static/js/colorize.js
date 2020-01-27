@@ -34,12 +34,17 @@ $( document ).ready( function() {
 				let node = data[latest];
 				window.raw_content = node["http://rdfs.org/sioc/ns#content"][0].value;
 				window.raw_content_wrapped = $(raw_content).wrap("<div class='paragraph_wrapper'><div class='body_copy'></div></div>");
+				console.log("raw content and raw_content_wrapped")
+				console.log(raw_content);
+				console.log(raw_content_wrapped);
 				callback(raw_content_wrapped);
 			})
 		}
 
 		function processHtml(content){
-			// console.log("process html");
+
+			console.log("process html");
+			console.log(content);
 			colorizehtml(content).then(function(response){
 				// console.log("colorized");
 				// console.log(response);
