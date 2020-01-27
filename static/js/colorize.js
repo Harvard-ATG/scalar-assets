@@ -35,7 +35,7 @@ $( document ).ready( function() {
 				window.raw_content = node["http://rdfs.org/sioc/ns#content"][0].value;
 				let prefix = "<div class='paragraph_wrapper'><div class='body_copy'>";
 				let suffix = "</div></div>"
-				window.raw_content_wrapped = `{prefix}{raw_content}{suffix}`;
+				window.raw_content_wrapped = `${prefix}${raw_content}${suffix}`;
 				console.log("raw content and raw_content_wrapped")
 				console.log(raw_content);
 				console.log(raw_content_wrapped);
