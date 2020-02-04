@@ -26,14 +26,18 @@ $( document ).ready( function() {
 			$.getJSON(scalar_api_json_uri, function(data){
 				let latest = data[url]["http://scalar.usc.edu/2012/01/scalar-ns#version"][0].value;
 				let node = data[latest];
-				window.raw_content = node["http://rdfs.org/sioc/ns#content"][0].value;
+				try {
+					window.raw_content = node["http://rdfs.org/sioc/ns#content"][0].value;
+				}
+				catch(err){
+					console.log("No content in page");
+				}
 				try {
 					language = node["http://purl.org/dc/terms/language"][0].value;
 					console.log(language)
 				}
 				catch(err){
-					console.log("No language set");
-					console.log(err);
+					console.log("No language set at dcterms:language metadata");
 				}
 				let prefix = "<div class='paragraph_wrapper'><div class='body_copy'>";
 				let suffix = "</div></div>"
