@@ -14,12 +14,12 @@
 
 $( document ).ready( function() {
 	$('body').on('pageLoadComplete',function() {
-		var page_url = window.location.href;
+		var page_url = window.location.origin + window.location.pathname;
 		var pageSlug = window.location.pathname.split("/").pop();
 		let colorize = true;
 		let language = null;
     // createToggleButton(colorize);
-    getScalarNode(pageSlug, processHtml);
+    getScalarNode(page_url, processHtml);
 
 		function getScalarNode(url, callback){
 			var scalar_api_json_uri = url + ".rdfjson";
