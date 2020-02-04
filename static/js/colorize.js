@@ -14,14 +14,14 @@
 
 $( document ).ready( function() {
 	$('body').on('pageLoadComplete',function() {
-		var url = window.location.href;
+		var page_url = window.location.href;
 		var pageSlug = window.location.pathname.split("/").pop();
 		let colorize = true;
 		let language = null;
     // createToggleButton(colorize);
     getScalarNode(pageSlug, processHtml);
 
-		function getScalarNode(nodeSlug, callback){
+		function getScalarNode(url, callback){
 			var scalar_api_json_uri = url + ".rdfjson";
 			$.getJSON(scalar_api_json_uri, function(data){
 				let latest = data[url]["http://scalar.usc.edu/2012/01/scalar-ns#version"][0].value;
@@ -29,6 +29,7 @@ $( document ).ready( function() {
 				window.raw_content = node["http://rdfs.org/sioc/ns#content"][0].value;
 				try {
 					language = node["http://purl.org/dc/terms/language"][0].value;
+					console.log(language)
 				}
 				catch(err){
 					console.log("No language set");
