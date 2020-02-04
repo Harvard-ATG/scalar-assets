@@ -17,7 +17,8 @@ $( document ).ready( function() {
 		var url = window.location.href;
 		var pageSlug = window.location.pathname.split("/").pop();
 		let colorize = true;
-    createToggleButton(colorize);
+		let language = null;
+    // createToggleButton(colorize);
     getScalarNode(pageSlug, processHtml);
 
 		function getScalarNode(nodeSlug, callback){
@@ -26,10 +27,15 @@ $( document ).ready( function() {
 				let latest = data[url]["http://scalar.usc.edu/2012/01/scalar-ns#version"][0].value;
 				let node = data[latest];
 				window.raw_content = node["http://rdfs.org/sioc/ns#content"][0].value;
+				try {
+					language = node["http://purl.org/dc/terms/language"][0].value;
+				}
 				let prefix = "<div class='paragraph_wrapper'><div class='body_copy'>";
 				let suffix = "</div></div>"
 				window.raw_content_wrapped = `${prefix}${raw_content}${suffix}`;
-				callback(raw_content_wrapped);
+				if(language !== "English"){
+					callback(raw_content_wrapped);
+				}
 			})
 		}
 
@@ -37,6 +43,7 @@ $( document ).ready( function() {
 			colorizehtml(content).then(function(response){
         window.colorized_content = response;
 				if(colorize){
+					createToggleButton(colorize);
 					$( "span[property='sioc:content']" ).html(colorized_content);
 				}
 			});
