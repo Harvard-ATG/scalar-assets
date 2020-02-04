@@ -30,6 +30,10 @@ $( document ).ready( function() {
 				try {
 					language = node["http://purl.org/dc/terms/language"][0].value;
 				}
+				catch(err){
+					console.log("No language set");
+					console.log(err);
+				}
 				let prefix = "<div class='paragraph_wrapper'><div class='body_copy'>";
 				let suffix = "</div></div>"
 				window.raw_content_wrapped = `${prefix}${raw_content}${suffix}`;
