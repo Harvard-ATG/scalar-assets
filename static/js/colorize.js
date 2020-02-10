@@ -18,6 +18,7 @@ $( document ).ready( function() {
 		var pageSlug = window.location.pathname.split("/").pop();
 		let colorize = true;
 		let language = null;
+		let color_safe = false;
     // createToggleButton(colorize);
     getScalarNode(page_url, processHtml);
 
@@ -65,15 +66,24 @@ $( document ).ready( function() {
 			$("body").append(ru_toggle);
 			let toggle_position = $(".ru-toggle").position();
 
-			var tooltip = `<div class="popover caption_font fade left in" role="tooltip" id="colorize_tooltip" style="position:fixed;top:${toggle_position.top - 4}px; left:${toggle_position.left - 250}px">
-			<div class="arrow" style="top:50%"></div><h3 class="popover-title" style="display:none"></h3><div class="popover-content">Toggle Colorization (Word Levels)</div></div>`
+			var tooltip = `<div class="popover caption_font fade left in" role="tooltip" id="colorize_tooltip" style="position:fixed;top:${toggle_position.top - 29}px; left:${toggle_position.left - 250}px">
+			<div class="arrow" style="top:50%"></div><h3 class="popover-title" style="display:none"></h3><div class="popover-content">Toggle Colorization (Word Levels)</div>
+			<div class="popover-content vertical-line"><span style="margin-right:10px">Colorsafe?</span><label class="switch"><input id="colorsafe" type="checkbox"><span class="slider round"></span></label></div></div>`
 			$(tooltip).insertAfter(".ru-toggle");
       $(".ru-toggle").click(toggleColorization);
-			$(".ru-toggle").mouseover(function(){
+			$(".ru-toggle", tooltip).mouseover(function(){
 				$("#colorize_tooltip").toggle();
 			})
-			$(".ru-toggle").mouseout(function(){
-				$("#colorize_tooltip").toggle();
+			$(".ru-toggle", tooltip).mouseout(function(){
+				$("#colorize_tooltip").toggle("slow");
+			})
+			$("#colorsafe").change(function(){
+				if(this.checked){
+					color_safe = true;
+				} else {
+					color_safe = false;
+				}
+				toggleColorSafe();
 			})
     }
 
@@ -89,6 +99,20 @@ $( document ).ready( function() {
         $( "span[property='sioc:content']" ).html(colorized_content);
 				$(".ru-toggle").css({"opacity": ".75"});
       }
+		}
+
+		function toggleColorSafe(){
+			let words = $(".word", ".wordlevel1", ".wordlevel2", ".wordlevel3", ".wordlevel4", ".wordlevel5", ".wordlevel6", "[data-level='1E']", "[data-level='2I']", "[data-level='3A']", "[data-level='3AU']", "[data-level='4S']", "[data-level='4SU']", "[data-level=5U']", "[data-level='6U']");
+			if(color_safe){
+				words.each(function(word){
+					word.addClass("colorSafe");
+				})
+			} else {
+				words.each(function(word){
+					word.removeClass("colorSafe");
+				})
+			}
+
 		}
 
 
