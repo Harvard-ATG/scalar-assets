@@ -19,6 +19,7 @@ $( document ).ready( function() {
 		let colorize = true;
 		let language = null;
 		let color_safe = false;
+		let colorize_tooltip = false;
     // createToggleButton(colorize);
     getScalarNode(page_url, processHtml);
 
@@ -69,12 +70,25 @@ $( document ).ready( function() {
 			var tooltip = `<div class="popover caption_font fade left in" role="tooltip" id="colorize_tooltip" style="position:fixed;top:${toggle_position.top - 29}px; left:${toggle_position.left - 250}px"><div class="arrow" style="top:50%"></div><h3 class="popover-title" style="display:none"></h3><div class="popover-content">Toggle Colorization (Word Levels)</div><div class="popover-content vertical-line"><span style="margin-right:10px">Colorsafe?</span><label class="switch"><input id="colorsafe" type="checkbox"><span class="slider round"></span></label></div></div>`
 			$(tooltip).insertAfter(".ru-toggle");
       $(".ru-toggle").click(toggleColorization);
+
 			$(".ru-toggle").mouseover(function(){
-				$("#colorize_tooltip").toggle();
+				colorize_tooltip = true;
+				$("#colorize_tooltip").toggle(colorize_tooltip);
 			})
 			$(".ru-toggle").mouseout(function(){
-				$("#colorize_tooltip").toggle("slow");
+				colorize_tooltip = false;
+				$("#colorize_tooltip").toggle(colorize_tooltip, "slow");
 			})
+
+			$(tooltip).mouseover(function(){
+				colorize_tooltip = true;
+				$("#colorize_tooltip").toggle(colorize_tooltip);
+			})
+			$(tooltip).mouseout(function(){
+				colorize_tooltip = false;
+				$("#colorize_tooltip").toggle(colorize_tooltip, "slow");
+			})
+
 			$("#colorsafe").change(function(){
 				console.log("colorsafe clicked");
 				if(this.checked){
