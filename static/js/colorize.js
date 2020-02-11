@@ -78,6 +78,7 @@ $( document ).ready( function() {
 				$("#colorize_tooltip").toggle("slow");
 			})
 			$("#colorsafe").change(function(){
+				console.log("colorsafe clicked");
 				if(this.checked){
 					color_safe = true;
 				} else {
