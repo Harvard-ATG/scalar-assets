@@ -83,11 +83,13 @@ $( document ).ready( function() {
 			$("#colorize_tooltip").mouseover(function(){
 				console.log("tooltip mousedover");
 				colorize_tooltip = true;
+				$("#colorize_tooltip").stop();
 				$("#colorize_tooltip").show();
 			})
 			$("#colorize_tooltip").mouseout(function(){
 				console.log("tooltip mousedout");
 				colorize_tooltip = false;
+				$("#colorize_tooltip").stop();
 				setTimeout(function(){ $("#colorize_tooltip").hide(); }, 1000);
 			})
 
