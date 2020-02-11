@@ -77,7 +77,7 @@ $( document ).ready( function() {
 			})
 			$(".ru-toggle").mouseout(function(){
 				colorize_tooltip = false;
-				$("#colorize_tooltip").hide("slow");
+				setTimeout($("#colorize_tooltip").hide(), 1000);
 			})
 
 			$(tooltip).mouseover(function(){
@@ -86,7 +86,7 @@ $( document ).ready( function() {
 			})
 			$(tooltip).mouseout(function(){
 				colorize_tooltip = false;
-				$("#colorize_tooltip").hide("slow");
+				setTimeout($("#colorize_tooltip").hide(), 1000);
 			})
 
 			$("#colorsafe").change(function(){
