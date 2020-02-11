@@ -80,11 +80,13 @@ $( document ).ready( function() {
 				setTimeout(function(){ $("#colorize_tooltip").hide(); }, 1000);
 			})
 
-			$(tooltip).mouseover(function(){
+			$("#colorize_tooltip").mouseover(function(){
+				console.log("tooltip mousedover");
 				colorize_tooltip = true;
 				$("#colorize_tooltip").show();
 			})
-			$(tooltip).mouseout(function(){
+			$("#colorize_tooltip").mouseout(function(){
+				console.log("tooltip mousedout");
 				colorize_tooltip = false;
 				setTimeout(function(){ $("#colorize_tooltip").hide(); }, 1000);
 			})
@@ -115,7 +117,9 @@ $( document ).ready( function() {
 		}
 
 		function toggleColorSafe(){
+			console.log("colorsafe!")
 			let words = $(".word", ".wordlevel1", ".wordlevel2", ".wordlevel3", ".wordlevel4", ".wordlevel5", ".wordlevel6", "[data-level='1E']", "[data-level='2I']", "[data-level='3A']", "[data-level='3AU']", "[data-level='4S']", "[data-level='4SU']", "[data-level=5U']", "[data-level='6U']");
+			console.log(words);
 			if(color_safe){
 				words.each(function(word){
 					word.addClass("colorSafe");
