@@ -73,20 +73,20 @@ $( document ).ready( function() {
 
 			$(".ru-toggle").mouseover(function(){
 				colorize_tooltip = true;
-				$("#colorize_tooltip").toggle(colorize_tooltip);
+				$("#colorize_tooltip").show();
 			})
 			$(".ru-toggle").mouseout(function(){
 				colorize_tooltip = false;
-				$("#colorize_tooltip").toggle(colorize_tooltip, "slow");
+				$("#colorize_tooltip").hide("slow");
 			})
 
 			$(tooltip).mouseover(function(){
 				colorize_tooltip = true;
-				$("#colorize_tooltip").toggle(colorize_tooltip);
+				$("#colorize_tooltip").show();
 			})
 			$(tooltip).mouseout(function(){
 				colorize_tooltip = false;
-				$("#colorize_tooltip").toggle(colorize_tooltip, "slow");
+				$("#colorize_tooltip").hide("slow");
 			})
 
 			$("#colorsafe").change(function(){
