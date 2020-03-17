@@ -30,6 +30,7 @@ $( document ).ready( function() {
 				let node = data[latest];
 				try {
 					window.raw_content = node["http://rdfs.org/sioc/ns#content"][0].value;
+          console.log(window.raw_content);
 				}
 				catch(err){
 					console.log("No content in page");
