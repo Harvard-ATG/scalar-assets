@@ -24,6 +24,10 @@ $( document ).ready( function() {
 			console.log(node);
 		}
 
+		function handleFailure(){
+			console.log("Failed. Node not loaded")
+		}
+
 
 
 		var page_url = window.location.origin + window.location.pathname;
