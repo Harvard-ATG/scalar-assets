@@ -15,7 +15,7 @@
 $( document ).ready( function() {
 	$('body').on('pageLoadComplete',function() {
 		// Testing ScalarAPI JS
-		if (scalarapi.loadNode("----", true, handleSuccess, handleFailure, 1 )) == "loaded" ) {
+		if (scalarapi.loadNode("----", true, handleSuccess, handleFailure, 1 ) == "loaded" ) {
 			console.log("loaded");
 			handleSuccess();
 		}
