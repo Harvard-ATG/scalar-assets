@@ -15,17 +15,86 @@
 $( document ).ready( function() {
 	$('body').on('pageLoadComplete',function() {
 		// Testing ScalarAPI JS
-		if (scalarapi.loadNode("----", true, handleSuccess, handleFailure, 1 ) == "loaded" ) {
-			console.log("loaded");
-			handleSuccess();
-		}
-		function handleSuccess(){
-			var node = scalarapi.getNode("----");
-			console.log(node);
+		// if (scalarapi.loadNode("----", true, handleSuccess, handleFailure, 1 ) == "loaded" ) {
+		// 	console.log("loaded");
+		// 	handleSuccess();
+		// }
+		// function handleSuccess(){
+		// 	var node = scalarapi.getNode("----");
+		// 	console.log(node);
+		// }
+		//
+		// function handleFailure(){
+		// 	console.log("Failed. Node not loaded")
+		// }
+
+		var parsed_text = {
+			"original": {
+			},
+			"processed": {
+			}
 		}
 
-		function handleFailure(){
-			console.log("Failed. Node not loaded")
+		function getTextNodes(parent){
+			var nodes = parent.childNodes;
+			var textNodes = [];
+			var otherNodes = [];
+
+			nodes.forEach(function(node){
+				if(node.nodeType === 3){
+					textNodes.push(node);
+					wrapNode(node, parent);
+				} else {
+					otherNodes.push(node);
+					getTextNodes(node);
+				}
+			});
+			return textNodes;
+		}
+
+		function notJustPunct(str){
+			const cyrillicAndRomanRegex = /[\u0400-\u04FFa-zA-Z]/gi;
+			var found = str.match(cyrillicAndRomanRegex);
+			return(found !== null);
+		}
+
+		function wrapNode(node, parent){
+			if(notJustPunct(node.data)){
+        let spanEl = document.createElement("span");
+				let id = uuidv4(); // https://github.com/uuidjs/uuid
+				spanEl.setAttribute("id", id);
+        parent.insertBefore(spanEl, node);
+        spanEl.appendChild(node);
+				parsed_text.original[id] = node.data;
+	    } else {
+	        return false;
+	    }
+		}
+
+		function replaceTextNode(id, type="processed"){
+			if(type == "processed" || type == "original"){
+				document.querySelector(`[id="${id}"]`).innerHTML = parsed_text[type][id];
+			} else {
+				return false;
+			}
+		}
+
+		function colorize(type="processed"){
+			for(var key in parsed_text[type]){
+				replaceTextNode(key, type=type);
+			}
+		}
+
+		function main(){
+			var body_copies = document.querySelectorAll(".body_copy");
+			body_copies.forEach(function(el){
+				getTextNodes(el);
+			});
+
+			// When complete, call the API
+
+			// When we get back data
+			colorize(type="processed");
 		}
 
 
@@ -37,7 +106,7 @@ $( document ).ready( function() {
 		let color_safe = false;
 		let colorize_tooltip = false;
     // createToggleButton(colorize);
-    getScalarNode(page_url, processHtml);
+    // getScalarNode(page_url, processHtml);
 
 		function getScalarNode(url, callback){
 			var scalar_api_json_uri = url + ".rdfjson";
