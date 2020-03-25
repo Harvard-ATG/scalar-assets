@@ -29,7 +29,7 @@ $( document ).ready( function() {
 		let colorSafe = false;
 		let colorizeTooltip = false;
 
-		var parsed_text = {
+		window.parsed_text = {
 			"original": {
 			},
 			"processed": {
@@ -67,6 +67,7 @@ $( document ).ready( function() {
         parent.insertBefore(spanEl, node);
         spanEl.appendChild(node);
 				parsed_text.original[id] = node.data;
+				return true;
 	    } else {
 	        return false;
 	    }
@@ -96,7 +97,7 @@ $( document ).ready( function() {
 
 			function getNodes(item){
 				return new Promise((resolve, reject) => {
-					getTextNodes(item);
+					resolve(getTextNodes(item));
 				})
 			}
 			let promiseArray = Array.from(bodyCopies).map(getNodes);
