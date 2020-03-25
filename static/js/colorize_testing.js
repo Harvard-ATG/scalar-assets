@@ -22,20 +22,6 @@
 
 $( document ).ready( function() {
 	$('body').on('pageLoadComplete',function() {
-		// Testing ScalarAPI JS
-		// if (scalarapi.loadNode("----", true, handleSuccess, handleFailure, 1 ) == "loaded" ) {
-		// 	console.log("loaded");
-		// 	handleSuccess();
-		// }
-		// function handleSuccess(){
-		// 	var node = scalarapi.getNode("----");
-		// 	console.log(node);
-		// }
-		//
-		// function handleFailure(){
-		// 	console.log("Failed. Node not loaded")
-		// }
-
 		var page_url = window.location.origin + window.location.pathname;
 		var pageSlug = window.location.pathname.split("/").pop();
 		let colorize = true;
@@ -134,44 +120,44 @@ $( document ).ready( function() {
     // createToggleButton(colorize);
     // getScalarNode(page_url, processHtml);
 
-		function getScalarNode(url, callback){
-			var scalar_api_json_uri = url + ".rdfjson";
-			$.getJSON(scalar_api_json_uri, function(data){
-				let latest = data[url]["http://scalar.usc.edu/2012/01/scalar-ns#version"][0].value;
-				let node = data[latest];
-				console.log(data);
-				try {
-					window.raw_content = node["http://rdfs.org/sioc/ns#content"][0].value;
-          console.log(window.raw_content);
-				}
-				catch(err){
-					console.log("No content in page");
-				}
-				try {
-					language = node["http://purl.org/dc/terms/language"][0].value;
-					console.log(language)
-				}
-				catch(err){
-					console.log("No language set at dcterms:language metadata");
-				}
-				let prefix = "<div class='paragraph_wrapper'><div class='body_copy'>";
-				let suffix = "</div></div>"
-				window.raw_content_wrapped = `${prefix}${raw_content}${suffix}`;
-				if(language !== "English"){
-					callback(raw_content_wrapped);
-				}
-			})
-		}
-
-		function processHtml(content){
-			colorizehtml(content).then(function(response){
-        window.colorized_content = response;
-				if(colorize){
-					createToggleButton(colorize);
-					$( "span[property='sioc:content']" ).html(colorized_content);
-				}
-			});
-		}
+		// function getScalarNode(url, callback){
+		// 	var scalar_api_json_uri = url + ".rdfjson";
+		// 	$.getJSON(scalar_api_json_uri, function(data){
+		// 		let latest = data[url]["http://scalar.usc.edu/2012/01/scalar-ns#version"][0].value;
+		// 		let node = data[latest];
+		// 		console.log(data);
+		// 		try {
+		// 			window.raw_content = node["http://rdfs.org/sioc/ns#content"][0].value;
+    //       console.log(window.raw_content);
+		// 		}
+		// 		catch(err){
+		// 			console.log("No content in page");
+		// 		}
+		// 		try {
+		// 			language = node["http://purl.org/dc/terms/language"][0].value;
+		// 			console.log(language)
+		// 		}
+		// 		catch(err){
+		// 			console.log("No language set at dcterms:language metadata");
+		// 		}
+		// 		let prefix = "<div class='paragraph_wrapper'><div class='body_copy'>";
+		// 		let suffix = "</div></div>"
+		// 		window.raw_content_wrapped = `${prefix}${raw_content}${suffix}`;
+		// 		if(language !== "English"){
+		// 			callback(raw_content_wrapped);
+		// 		}
+		// 	})
+		// }
+		//
+		// function processHtml(content){
+		// 	colorizehtml(content).then(function(response){
+    //     window.colorized_content = response;
+		// 		if(colorize){
+		// 			createToggleButton(colorize);
+		// 			$( "span[property='sioc:content']" ).html(colorized_content);
+		// 		}
+		// 	});
+		// }
 
 
 
