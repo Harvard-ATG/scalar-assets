@@ -14,7 +14,7 @@
 
 	function colorize_elements(elements, params={}){
 		const api = new ApiClient();
-		params['attribute'] = "data";
+		// params['attribute'] = "data";
 		return api.colorize_elements(elements, params).then((res) => {
 			return res;
 		});
