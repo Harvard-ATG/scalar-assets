@@ -2,12 +2,20 @@
   "use strict";
 	const ApiClient = global.app.ApiClient;
 
-	function colorizehtml(input_html) {
+	// function colorizehtml(input_html) {
+	// 	const api = new ApiClient();
+	// 	var params = {
+	// 		"attribute": "data",
+	// 	}
+	// 	return api.colorizehtml(input_html, params).then((res) => {
+	// 		return res;
+	// 	});
+	// }
+
+	function colorize_elements(elements, params={}){
 		const api = new ApiClient();
-		var params = {
-			"attribute": "data",
-		}
-		return api.colorizehtml(input_html, params).then((res) => {
+		params['attribute'] = "data";
+		return api.colorize_elements(elements, params).then((res) => {
 			return res;
 		});
 	}
@@ -32,8 +40,8 @@ $( document ).ready( function() {
 		var pageSlug = window.location.pathname.split("/").pop();
 		let colorize = true;
 		let language = null;
-		let color_safe = false;
-		let colorize_tooltip = false;
+		let colorSafe = false;
+		let colorizeTooltip = false;
 
 		var parsed_text = {
 			"original": {
@@ -93,8 +101,9 @@ $( document ).ready( function() {
 		}
 
 		function main(){
-			var body_copies = document.querySelectorAll(".body_copy");
-			body_copies.forEach(function(el){
+			console.log("main running");
+			var bodyCopies = document.querySelectorAll(".body_copy");
+			bodyCopies.forEach(function(el){
 				getTextNodes(el);
 			});
 
@@ -120,8 +129,8 @@ $( document ).ready( function() {
 		// var pageSlug = window.location.pathname.split("/").pop();
 		// let colorize = true;
 		// let language = null;
-		// let color_safe = false;
-		// let colorize_tooltip = false;
+		// let colorSafe = false;
+		// let colorizeTooltip = false;
     // createToggleButton(colorize);
     // getScalarNode(page_url, processHtml);
 
@@ -171,38 +180,38 @@ $( document ).ready( function() {
 			$("body").append(ru_toggle);
 			let toggle_position = $(".ru-toggle").position();
 
-			var tooltip = `<div class="popover caption_font fade left in" role="tooltip" id="colorize_tooltip" style="position:fixed;top:${toggle_position.top - 29}px; left:${toggle_position.left - 250}px"><div class="arrow" style="top:50%"></div><h3 class="popover-title" style="display:none"></h3><div class="popover-content">Toggle Colorization (Word Levels)</div><div class="popover-content vertical-line"><span style="margin-right:10px">Colorsafe?</span><label class="switch"><input id="colorsafe" type="checkbox"><span class="slider round"></span></label></div></div>`
+			var tooltip = `<div class="popover caption_font fade left in" role="tooltip" id="colorizeTooltip" style="position:fixed;top:${toggle_position.top - 29}px; left:${toggle_position.left - 250}px"><div class="arrow" style="top:50%"></div><h3 class="popover-title" style="display:none"></h3><div class="popover-content">Toggle Colorization (Word Levels)</div><div class="popover-content vertical-line"><span style="margin-right:10px">Colorsafe?</span><label class="switch"><input id="colorsafe" type="checkbox"><span class="slider round"></span></label></div></div>`
 			$(tooltip).insertAfter(".ru-toggle");
       $(".ru-toggle").click(toggleColorization);
 
 			$(".ru-toggle").mouseover(function(){
-				colorize_tooltip = true;
-				$("#colorize_tooltip").show();
+				colorizeTooltip = true;
+				$("#colorizeTooltip").show();
 			})
 			$(".ru-toggle").mouseout(function(){
-				colorize_tooltip = false;
-				setTimeout(function(){ $("#colorize_tooltip").hide(); }, 1000);
+				colorizeTooltip = false;
+				setTimeout(function(){ $("#colorizeTooltip").hide(); }, 1000);
 			})
 
-			$("#colorize_tooltip").mouseover(function(){
+			$("#colorizeTooltip").mouseover(function(){
 				console.log("tooltip mousedover");
-				colorize_tooltip = true;
-				$("#colorize_tooltip").stop();
-				$("#colorize_tooltip").show();
+				colorizeTooltip = true;
+				$("#colorizeTooltip").stop();
+				$("#colorizeTooltip").show();
 			})
-			$("#colorize_tooltip").mouseout(function(){
+			$("#colorizeTooltip").mouseout(function(){
 				console.log("tooltip mousedout");
-				colorize_tooltip = false;
-				$("#colorize_tooltip").stop();
-				setTimeout(function(){ $("#colorize_tooltip").hide(); }, 1000);
+				colorizeTooltip = false;
+				$("#colorizeTooltip").stop();
+				setTimeout(function(){ $("#colorizeTooltip").hide(); }, 1000);
 			})
 
 			$("#colorsafe").change(function(){
 				console.log("colorsafe clicked");
 				if(this.checked){
-					color_safe = true;
+					colorSafe = true;
 				} else {
-					color_safe = false;
+					colorSafe = false;
 				}
 				toggleColorSafe();
 			})
@@ -226,7 +235,7 @@ $( document ).ready( function() {
 			console.log("colorsafe!")
 			let words = $(".word", ".wordlevel1", ".wordlevel2", ".wordlevel3", ".wordlevel4", ".wordlevel5", ".wordlevel6", "[data-level='1E']", "[data-level='2I']", "[data-level='3A']", "[data-level='3AU']", "[data-level='4S']", "[data-level='4SU']", "[data-level=5U']", "[data-level='6U']");
 			console.log(words);
-			if(color_safe){
+			if(colorSafe){
 				words.each(function(word){
 					word.addClass("colorSafe");
 				})
