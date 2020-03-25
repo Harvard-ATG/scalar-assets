@@ -75,7 +75,15 @@ $( document ).ready( function() {
 
 		function replaceTextNode(id, type="processed"){
 			if(type == "processed" || type == "original"){
-				document.querySelector(`[id="${id}"]`).innerHTML = parsed_text[type][id];
+				try {
+					document.querySelector(`[id="${id}"]`).innerHTML = parsed_text[type][id];
+					return true;
+				}
+				catch(err){
+					console.log("Error: text node not replaced.")
+					console.log(err);
+					return false;
+				}
 			} else {
 				return false;
 			}
