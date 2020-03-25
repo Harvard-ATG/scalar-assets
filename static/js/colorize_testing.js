@@ -88,28 +88,47 @@ $( document ).ready( function() {
 
 		function main(){
 			console.log("main running");
-			var bodyCopies = document.querySelectorAll(".body_copy");
-			bodyCopies.forEach(function(el){
-				getTextNodes(el);
-			});
 
-			payload = {
-				"elements": parsed_text['original']
+			var bodyCopies = document.querySelectorAll(".body_copy");
+			// bodyCopies.forEach(function(el){
+			// 	getTextNodes(el);
+			// });
+
+			function getNodes(item){
+				return new Promise((resolve, reject) => {
+					getTextNodes(item);
+				})
 			}
+			let promiseArray = Array.from(bodyCopies).map(getNodes);
+			Promise.all(promiseArray).then(results => {
+				console.log("all promises finshed");
+				var payload = {
+					"elements": parsed_text['original']
+				}
+				colorize_elements(payload).then(function(response){
+					parsed_text['processed'] = response['data']['elements'];
+					if(colorize){
+						createToggleButton(colorize);
+						swapNodes(type="processed");
+					}
+				});
+			})
+
+			// var payload = {
+			// 	"elements": parsed_text['original']
+			// }
 
 			// When complete, call the API
-			colorize_elements(payload).then(function(response){
-				parsed_text['processed'] = response['data']['elements'];
-				if(colorize){
-					createToggleButton(colorize);
-					swapNodes(type="processed");
-				}
-			});
+			// colorize_elements(payload).then(function(response){
+			// 	parsed_text['processed'] = response['data']['elements'];
+			// 	if(colorize){
+			// 		createToggleButton(colorize);
+			// 		swapNodes(type="processed");
+			// 	}
+			// });
 		}
 
 		main();
-
-
 
 		// var page_url = window.location.origin + window.location.pathname;
 		// var pageSlug = window.location.pathname.split("/").pop();
