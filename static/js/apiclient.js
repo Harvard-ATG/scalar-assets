@@ -72,6 +72,19 @@
             var jqXhr = this._ajax(url, settings);
             return jqXhr;
         }
+
+        colorize_elements(elements, params){
+          params = params || {};
+          var url = this._url('/api/colorize/elements', params);
+          var settings = {
+            method: "POST",
+            headers: {'Content-Type':'application/json'},
+            dataType: "json",
+            data: elements
+          };
+          var jqXhr = this._ajax(url, settings);
+          return jqXhr;
+        }
     }
 
     // Exports

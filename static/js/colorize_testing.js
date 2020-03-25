@@ -28,6 +28,13 @@ $( document ).ready( function() {
 		// 	console.log("Failed. Node not loaded")
 		// }
 
+		var page_url = window.location.origin + window.location.pathname;
+		var pageSlug = window.location.pathname.split("/").pop();
+		let colorize = true;
+		let language = null;
+		let color_safe = false;
+		let colorize_tooltip = false;
+
 		var parsed_text = {
 			"original": {
 			},
@@ -91,20 +98,28 @@ $( document ).ready( function() {
 				getTextNodes(el);
 			});
 
-			// When complete, call the API
+			payload = {
+				"elements": parsed_text['original']
+			}
 
-			// When we get back data
-			colorize(type="processed");
+			// When complete, call the API
+			colorize_elements(payload).then(function(response){
+				parsed_text['processed'] = response['data']['elements'];
+				if(colorize){
+					createToggleButton(colorize);
+					colorize(type="processed");
+				}
+			});
 		}
 
 
 
-		var page_url = window.location.origin + window.location.pathname;
-		var pageSlug = window.location.pathname.split("/").pop();
-		let colorize = true;
-		let language = null;
-		let color_safe = false;
-		let colorize_tooltip = false;
+		// var page_url = window.location.origin + window.location.pathname;
+		// var pageSlug = window.location.pathname.split("/").pop();
+		// let colorize = true;
+		// let language = null;
+		// let color_safe = false;
+		// let colorize_tooltip = false;
     // createToggleButton(colorize);
     // getScalarNode(page_url, processHtml);
 
