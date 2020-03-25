@@ -86,7 +86,7 @@ $( document ).ready( function() {
 			}
 		}
 
-		function colorize(type="processed"){
+		function swapNodes(type="processed"){
 			for(var key in parsed_text[type]){
 				replaceTextNode(key, type=type);
 			}
@@ -107,10 +107,12 @@ $( document ).ready( function() {
 				parsed_text['processed'] = response['data']['elements'];
 				if(colorize){
 					createToggleButton(colorize);
-					colorize(type="processed");
+					swapNodes(type="processed");
 				}
 			});
 		}
+
+		main();
 
 
 
