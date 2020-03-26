@@ -107,6 +107,7 @@ $( document ).ready( function() {
 				colorize_elements(payload).then(function(response){
 					console.log(response);
 					window.parsed_text['processed'] = response['data']['elements'];
+					console.log(colorize);
 					if(colorize){
 						createToggleButton(colorize);
 						swapNodes(type="processed");
