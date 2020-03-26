@@ -104,6 +104,7 @@ $( document ).ready( function() {
 				var payload = {
 					"elements": parsed_text['raw']
 				}
+				console.log(payload);
 				colorize_elements(payload).then(function(response){
 					console.log(response);
 					window.parsed_text['processed'] = response['data']['elements'];
