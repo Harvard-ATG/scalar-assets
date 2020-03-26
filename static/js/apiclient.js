@@ -3,9 +3,7 @@
 
     class ApiClient {
         constructor() {
-            // this.api_base_url = "https://54.80.74.86";
-            //this.api_base_url = "https://visualizingrussian.fas.harvard.edu";
-            this.api_base_url = "https://ec2-3-89-147-167.compute-1.amazonaws.com/api/colorize/elements" //Using dev
+            this.api_base_url = "https://visualizingrussian.fas.harvard.edu"
             this.ajax_settings = {
                 dataType: "json",
                 contentType: "application/json"
