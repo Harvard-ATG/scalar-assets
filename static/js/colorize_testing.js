@@ -84,7 +84,7 @@ $( document ).ready( function() {
 		function swapNodes(source="processed"){
 			console.log("swapping nodes");
 			for(var key in parsed_text[source]){
-				replaceTextNode(key, source=source);
+				replaceTextNode(key, source);
 			}
 		}
 
@@ -111,7 +111,7 @@ $( document ).ready( function() {
 					console.log(colorize);
 					if(colorize){
 						createToggleButton(colorize);
-						swapNodes(source="processed");
+						swapNodes("processed");
 					}
 				});
 			})
