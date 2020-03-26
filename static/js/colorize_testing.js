@@ -63,11 +63,11 @@ $( document ).ready( function() {
 	    }
 		}
 
-		function replaceTextNode(id, type="processed"){
+		function replaceTextNode(id, source="processed"){
 			console.log("replace text node");
-			if(type == "processed" || type == "raw"){
+			if(source == "processed" || source == "raw"){
 				try {
-					document.querySelector(`[id="${id}"]`).innerHTML = parsed_text[type][id];
+					document.querySelector(`[id="${id}"]`).innerHTML = parsed_text[source][id];
 					return true;
 				}
 				catch(err){
@@ -76,14 +76,15 @@ $( document ).ready( function() {
 					return false;
 				}
 			} else {
+				console.log("Invalid source.")
 				return false;
 			}
 		}
 
-		function swapNodes(type="processed"){
+		function swapNodes(source="processed"){
 			console.log("swapping nodes");
-			for(var key in parsed_text[type]){
-				replaceTextNode(key, type=type);
+			for(var key in parsed_text[source]){
+				replaceTextNode(key, source=source);
 			}
 		}
 
@@ -110,7 +111,7 @@ $( document ).ready( function() {
 					console.log(colorize);
 					if(colorize){
 						createToggleButton(colorize);
-						swapNodes(type="processed");
+						swapNodes(source="processed");
 					}
 				});
 			})
@@ -162,12 +163,12 @@ $( document ).ready( function() {
       if($(this).data("colorize") == true){
         $(this).data("colorize", false);
 				colorize = false;
-				swapNodes(type="raw");
+				swapNodes(source="raw");
 				$(".ru-toggle").css({"opacity": ".25"});
       } else {
         $(this).data("colorize", true);
 				colorize = true;
-				swapNodes(type="processed");
+				swapNodes(source="processed");
 				$(".ru-toggle").css({"opacity": ".75"});
       }
 		}
