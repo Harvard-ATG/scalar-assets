@@ -26,25 +26,6 @@ $( document ).ready( function() {
 			}
 		}
 
-		var testBlob = {
-	   "elements":{
-	      "ef23c62f-759a-40ca-9401-6f5fff6aae6e":"[01-01] В аудито́рии университе́та",
-	      "f7464298-7a7a-4b41-8e51-f1ddc005576d":"— Приве́т! Как тебя зову́т?",
-	      "2ff91b9b-2fe9-4665-bbc5-1dd4c5288b9c":"— Ле́на. А тебя?",
-	      "3c28e678-5f64-43ec-a391-6fa16cadef00":"— Ви́ктор. Очень прия́тно.",
-	      "1f45c3c7-3189-4995-8913-9e591de4fa03":"— Мне то́же. Ты отку́да?",
-	      "922450d8-18a6-4558-9168-556865199b0d":"— Я из Каза́ни, а ты?",
-	      "065681d0-ea4e-4e2a-a051-32b95d5b72f8":"— Я из Пско́ва. На како́м факульте́те ты у́чишься?",
-	      "95a61edf-69ec-4bf1-b971-d0f24a1794ec":"— Я то́лько что поступи́л на факульте́т журнали́стики. Я на первом курсе. А ты?",
-	      "6d5f8888-f92c-4b9f-ad71-ef5386a1e3e7":"— А я учу́сь на тре́тьем ку́рсе на факульте́те политоло́гии.",
-	      "f0cc536c-4c56-4ea1-9cce-d1853be4b6ba":"[01-02] На заня́тии",
-	      "01b9281f-e919-45ac-aa03-c80a072ae48f":"— Здра́вствуйте! Меня зову́т Ольга Алекса́ндровна. Я ваш но́вый преподава́тель ру́сского языка́. А тепе́рь ва́ша о́чередь. Предста́вьтесь, пожа́луйста.",
-	      "d34d1db0-e58f-41ff-bf27-0ccdb15daf2d":"— Здра́вствуйте! Меня зову́т Джейк. Я учу́сь на пе́рвом ку́рсе. Я изуча́ю русский язык и литерату́ру.",
-	      "88f26807-1679-4a95-a4f9-6c1d02f49c39":"— До́брый день! Меня зову́т Ло́ра. Я студе́нтка Га́рвардского университе́та. Я учу́сь на пе́рвом ку́рсе магистрату́ры. Я изуча́ю политоло́гию и стра́ны Восто́чной Евро́пы.",
-	      "9b6f2e61-60c4-4343-85d0-4f6a87c5d8ad":"твоя́/ва́ша о́чередь your turn"
-	   }
-	}
-
 		function getTextNodes(parent){
 			var nodes = parent.childNodes;
 			var textNodes = [];
@@ -83,6 +64,7 @@ $( document ).ready( function() {
 		}
 
 		function replaceTextNode(id, type="processed"){
+			console.log("replace text node");
 			if(type == "processed" || type == "raw"){
 				try {
 					document.querySelector(`[id="${id}"]`).innerHTML = parsed_text[type][id];
@@ -99,6 +81,7 @@ $( document ).ready( function() {
 		}
 
 		function swapNodes(type="processed"){
+			console.log("swapping nodes");
 			for(var key in parsed_text[type]){
 				replaceTextNode(key, type=type);
 			}
@@ -108,9 +91,6 @@ $( document ).ready( function() {
 			console.log("main running");
 
 			var bodyCopies = document.querySelectorAll(".body_copy");
-			// bodyCopies.forEach(function(el){
-			// 	getTextNodes(el);
-			// });
 
 			function getNodes(item){
 				return new Promise((resolve, reject) => {
@@ -120,11 +100,6 @@ $( document ).ready( function() {
 			let promiseArray = Array.from(bodyCopies).map(getNodes);
 			Promise.all(promiseArray).then(results => {
 				console.log("all promises finshed");
-				console.log("TEST");
-				console.log(testBlob);
-				colorize_elements(testBlob).then(function(response){
-					console.log(response);
-				})
 				var payload = {
 					"elements": parsed_text['raw']
 				}
