@@ -64,7 +64,6 @@ $( document ).ready( function() {
 		}
 
 		function replaceTextNode(id, source="processed"){
-			console.log("replace text node");
 			if(source == "processed" || source == "raw"){
 				try {
 					document.querySelector(`[id="${id}"]`).innerHTML = parsed_text[source][id];
@@ -106,9 +105,7 @@ $( document ).ready( function() {
 				}
 				console.log(payload);
 				colorize_elements(payload).then(function(response){
-					console.log(response);
 					window.parsed_text['processed'] = response['data']['elements'];
-					console.log(colorize);
 					if(colorize){
 						createToggleButton(colorize);
 						swapNodes("processed");
@@ -163,12 +160,12 @@ $( document ).ready( function() {
       if($(this).data("colorize") == true){
         $(this).data("colorize", false);
 				colorize = false;
-				swapNodes(source="raw");
+				swapNodes("raw");
 				$(".ru-toggle").css({"opacity": ".25"});
       } else {
         $(this).data("colorize", true);
 				colorize = true;
-				swapNodes(source="processed");
+				swapNodes("processed");
 				$(".ru-toggle").css({"opacity": ".75"});
       }
 		}
