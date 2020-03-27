@@ -25,7 +25,7 @@ $( document ).ready( function() {
 			}
 		}
 
-		def getLanguage(url){
+		function getLanguage(url){
 			var scalar_api_json_uri = url + ".rdfjson";
 			$.getJSON(scalar_api_json_uri, function(data){
 				let latest = data[url]["http://scalar.usc.edu/2012/01/scalar-ns#version"][0].value;
