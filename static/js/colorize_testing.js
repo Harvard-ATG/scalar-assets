@@ -115,11 +115,12 @@ $( document ).ready( function() {
 		}
 
     function createToggleButton(colorize_text=true){
-      var ru_toggle = `<img class="ru-toggle" title="" data-toggle="popover" data-colorize="${colorize_text}"data-placement="bottom" src="https://harvard-atg.github.io/scalar-assets/static/img/ru_flag_round_250.png" alt="Russian colorize toggle">`;
+      var ru_toggle = `<img class="ru-toggle" title="" data-toggle="popover" data-colorize="${colorize_text}" data-placement="bottom" src="https://harvard-atg.github.io/scalar-assets/static/img/ru_flag_round_250.png" alt="Russian colorize toggle">`;
 			$("body").append(ru_toggle);
 			let toggle_position = $(".ru-toggle").position();
 
-			var tooltip = `<div class="popover caption_font fade left in" role="tooltip" id="colorizeTooltip" style="position:fixed;top:${toggle_position.top - 29}px; left:${toggle_position.left - 250}px"><div class="arrow" style="top:50%"></div><h3 class="popover-title" style="display:none"></h3><div class="popover-content">Toggle Colorization (Word Levels)</div><div class="popover-content vertical-line"><span style="margin-right:10px">Colorsafe?</span><label class="switch"><input id="colorsafe" type="checkbox"><span class="slider round"></span></label></div></div>`
+			var tooltip = `<div class="popover caption_font fade left in" role="tooltip" id="colorizeTooltip" style="position:fixed;top:${toggle_position.top - 29}px; left:${toggle_position.left - 250}px"><div class="arrow" style="top:50%"></div><h3 class="popover-title" style="display:none"></h3><div class="popover-content">Toggle Colorization (Word Levels)</div><span class="popover-content vertical-line"><span style="margin-right:10px">Colorsafe?</span><input id="colorsafe" type="checkbox"></span></div>`;
+
 			$(tooltip).insertAfter(".ru-toggle");
       $(".ru-toggle").click(toggleColorization);
 
@@ -157,13 +158,14 @@ $( document ).ready( function() {
     }
 
 		function toggleColorization(){
-      if($(this).data("colorize") == true){
-        $(this).data("colorize", false);
+      // if($(this).data("colorize") == true){
+      //   $(this).data("colorize", false);
+			if(colorize){
 				colorize = false;
 				swapNodes("raw");
 				$(".ru-toggle").css({"opacity": ".25"});
       } else {
-        $(this).data("colorize", true);
+        // $(this).data("colorize", true);
 				colorize = true;
 				swapNodes("processed");
 				$(".ru-toggle").css({"opacity": ".75"});
@@ -172,15 +174,14 @@ $( document ).ready( function() {
 
 		function toggleColorSafe(){
 			console.log("colorsafe!")
-			let words = $(".word", ".wordlevel1", ".wordlevel2", ".wordlevel3", ".wordlevel4", ".wordlevel5", ".wordlevel6", "[data-level='1E']", "[data-level='2I']", "[data-level='3A']", "[data-level='3AU']", "[data-level='4S']", "[data-level='4SU']", "[data-level=5U']", "[data-level='6U']");
-			console.log(words);
+			let words = document.querySelectorAll('[data-level="1E"], [data-level="2I"], [data-level="3A"], [data-level="3AU"], [data-level="4S"], [data-level="4SU"], [data-level="5U"], [data-level="6U"], .word, .wordlevel1, .wordlevel2, .wordlevel3, .wordlevel4, .wordlevel5, .wordlevel6');
 			if(colorSafe){
-				words.each(function(word){
-					word.addClass("colorSafe");
+				words.forEach(function(word){
+					word.classList.add("colorSafe");
 				})
 			} else {
-				words.each(function(word){
-					word.removeClass("colorSafe");
+				words.forEach(function(word){
+					word.classList.remove("colorSafe");
 				})
 			}
 		}
