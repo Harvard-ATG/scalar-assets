@@ -15,15 +15,31 @@ $( document ).ready( function() {
 		var page_url = window.location.origin + window.location.pathname;
 		var pageSlug = window.location.pathname.split("/").pop();
 		let colorize = true;
-		let language = null;
+		let language = getLanguage(page_url);
 		let colorSafe = false;
 		let colorizeTooltip = false;
-
 		window.parsed_text = {
 			"raw": {
 			},
 			"processed": {
 			}
+		}
+
+		def getLanguage(url){
+			var scalar_api_json_uri = url + ".rdfjson";
+			$.getJSON(scalar_api_json_uri, function(data){
+				let latest = data[url]["http://scalar.usc.edu/2012/01/scalar-ns#version"][0].value;
+				let node = data[latest];
+				try {
+					var lang = node["http://purl.org/dc/terms/language"][0].value;
+					console.log(lang);
+				}
+				catch(err){
+					console.log("No language set at dcterms:language metadata");
+					var lang = false;
+				}
+				return lang ? lang : null;
+			});
 		}
 
 		function getTextNodes(parent){
@@ -90,28 +106,30 @@ $( document ).ready( function() {
 		function main(){
 			console.log("main running");
 
-			var bodyCopies = document.querySelectorAll(".body_copy");
+			if(language !== "English"){
+				var bodyCopies = document.querySelectorAll(".body_copy");
 
-			function getNodes(item){
-				return new Promise((resolve, reject) => {
-					resolve(getTextNodes(item));
+				function getNodes(item){
+					return new Promise((resolve, reject) => {
+						resolve(getTextNodes(item));
+					})
+				}
+				let promiseArray = Array.from(bodyCopies).map(getNodes);
+				Promise.all(promiseArray).then(results => {
+					console.log("all promises finshed");
+					var payload = {
+						"elements": parsed_text['raw']
+					}
+					console.log(payload);
+					colorize_elements(payload).then(function(response){
+						window.parsed_text['processed'] = response['data']['elements'];
+						if(colorize){
+							createToggleButton(colorize);
+							swapNodes("processed");
+						}
+					});
 				})
 			}
-			let promiseArray = Array.from(bodyCopies).map(getNodes);
-			Promise.all(promiseArray).then(results => {
-				console.log("all promises finshed");
-				var payload = {
-					"elements": parsed_text['raw']
-				}
-				console.log(payload);
-				colorize_elements(payload).then(function(response){
-					window.parsed_text['processed'] = response['data']['elements'];
-					if(colorize){
-						createToggleButton(colorize);
-						swapNodes("processed");
-					}
-				});
-			})
 		}
 
     function createToggleButton(colorize_text=true){
