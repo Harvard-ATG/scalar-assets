@@ -2,12 +2,9 @@
   "use strict";
 	const ApiClient = global.app.ApiClient;
 
-	function colorizehtml(input_html) {
+	function colorize_elements(elements, params={}){
 		const api = new ApiClient();
-		var params = {
-			"attribute": "data",
-		}
-		return api.colorizehtml(input_html, params).then((res) => {
+		return api.colorize_elements(elements, params).then((res) => {
 			return res;
 		});
 	}
@@ -17,125 +14,199 @@ $( document ).ready( function() {
 		var page_url = window.location.origin + window.location.pathname;
 		var pageSlug = window.location.pathname.split("/").pop();
 		let colorize = true;
-		let language = null;
-		let color_safe = false;
-		let colorize_tooltip = false;
-    // createToggleButton(colorize);
-    getScalarNode(page_url, processHtml);
+		let language = getLanguage(page_url);
+		let colorSafe = false;
+		let colorizeTooltip = false;
+		window.parsed_text = {
+			"raw": {
+			},
+			"processed": {
+			}
+		}
 
-		function getScalarNode(url, callback){
+		main();
+
+		function getLanguage(url){
 			var scalar_api_json_uri = url + ".rdfjson";
 			$.getJSON(scalar_api_json_uri, function(data){
 				let latest = data[url]["http://scalar.usc.edu/2012/01/scalar-ns#version"][0].value;
 				let node = data[latest];
-				console.log(data);
 				try {
-					window.raw_content = node["http://rdfs.org/sioc/ns#content"][0].value;
-          console.log(window.raw_content);
-				}
-				catch(err){
-					console.log("No content in page");
-				}
-				try {
-					language = node["http://purl.org/dc/terms/language"][0].value;
-					console.log(language)
+					var lang = node["http://purl.org/dc/terms/language"][0].value;
+					console.log(lang);
 				}
 				catch(err){
 					console.log("No language set at dcterms:language metadata");
+					var lang = false;
 				}
-				let prefix = "<div class='paragraph_wrapper'><div class='body_copy'>";
-				let suffix = "</div></div>"
-				window.raw_content_wrapped = `${prefix}${raw_content}${suffix}`;
-				if(language !== "English"){
-					callback(raw_content_wrapped);
-				}
-			})
-		}
-
-		function processHtml(content){
-			colorizehtml(content).then(function(response){
-        window.colorized_content = response;
-				if(colorize){
-					createToggleButton(colorize);
-					$( "span[property='sioc:content']" ).html(colorized_content);
-				}
+				return lang ? lang : null;
 			});
 		}
 
+		function getTextNodes(parent){
+			var nodes = parent.childNodes;
+			var textNodes = [];
+			var otherNodes = [];
 
+			nodes.forEach(function(node){
+				if(node.nodeType === 3){
+					textNodes.push(node);
+					wrapNode(node, parent);
+				} else {
+					otherNodes.push(node);
+					getTextNodes(node);
+				}
+			});
+			return textNodes;
+		}
+
+		function notJustPunct(str){
+			const cyrillicAndRomanRegex = /[\u0400-\u04FFa-zA-Z]/gi;
+			var found = str.match(cyrillicAndRomanRegex);
+			return(found !== null);
+		}
+
+		function wrapNode(node, parent){
+			if(notJustPunct(node.data)){
+        let spanEl = document.createElement("span");
+				let id = uuidv4(); // https://github.com/uuidjs/uuid
+				spanEl.setAttribute("id", id);
+        parent.insertBefore(spanEl, node);
+        spanEl.appendChild(node);
+				parsed_text.raw[id] = node.data;
+				return true;
+	    } else {
+	        return false;
+	    }
+		}
+
+		function replaceTextNode(id, source="processed"){
+			if(source == "processed" || source == "raw"){
+				try {
+					document.querySelector(`[id="${id}"]`).innerHTML = parsed_text[source][id];
+					return true;
+				}
+				catch(err){
+					console.log("Error: text node not replaced.")
+					console.log(err);
+					return false;
+				}
+			} else {
+				console.log("Invalid source.")
+				return false;
+			}
+		}
+
+		function swapNodes(source="processed"){
+			console.log("swapping nodes");
+			for(var key in parsed_text[source]){
+				replaceTextNode(key, source);
+			}
+		}
+
+		function main(){
+			console.log("main running");
+
+			if(language !== "English"){
+				var bodyCopies = document.querySelectorAll(".body_copy");
+
+				function getNodes(item){
+					return new Promise((resolve, reject) => {
+						resolve(getTextNodes(item));
+					})
+				}
+				let promiseArray = Array.from(bodyCopies).map(getNodes);
+				Promise.all(promiseArray).then(results => {
+					console.log("all promises finshed");
+					var payload = {
+						"elements": parsed_text['raw']
+					}
+					console.log(payload);
+					colorize_elements(payload).then(function(response){
+						window.parsed_text['processed'] = response['data']['elements'];
+						if(colorize){
+							createToggleButton(colorize);
+							swapNodes("processed");
+						}
+					});
+				})
+			}
+		}
 
     function createToggleButton(colorize_text=true){
-      var ru_toggle = `<img class="ru-toggle" title="" data-toggle="popover" data-colorize="${colorize_text}"data-placement="bottom" src="https://harvard-atg.github.io/scalar-assets/static/img/ru_flag_round_250.png" alt="Russian colorize toggle">`;
+      var ru_toggle = `<img class="ru-toggle" title="" data-toggle="popover" data-colorize="${colorize_text}" data-placement="bottom" src="https://harvard-atg.github.io/scalar-assets/static/img/ru_flag_round_250.png" alt="Russian colorize toggle">`;
 			$("body").append(ru_toggle);
 			let toggle_position = $(".ru-toggle").position();
 
-			var tooltip = `<div class="popover caption_font fade left in" role="tooltip" id="colorize_tooltip" style="position:fixed;top:${toggle_position.top - 29}px; left:${toggle_position.left - 250}px"><div class="arrow" style="top:50%"></div><h3 class="popover-title" style="display:none"></h3><div class="popover-content">Toggle Colorization (Word Levels)</div><div class="popover-content vertical-line"><span style="margin-right:10px">Colorsafe?</span><label class="switch"><input id="colorsafe" type="checkbox"><span class="slider round"></span></label></div></div>`
+			var tooltip = `<div class="popover caption_font fade left in" role="tooltip" id="colorizeTooltip" style="position:fixed;top:${toggle_position.top - 24}px; left:${toggle_position.left - 150}px"><div class="arrow" style="top:50%"></div><h3 class="popover-title">Toggle Word Levels</h3><div class="popover-content vertical-line" style="text-align:center"><span style="margin-right:10px">Colorsafe?</span><input id="colorsafe" type="checkbox"></div></div>`;
+
 			$(tooltip).insertAfter(".ru-toggle");
       $(".ru-toggle").click(toggleColorization);
 
 			$(".ru-toggle").mouseover(function(){
-				colorize_tooltip = true;
-				$("#colorize_tooltip").show();
+				colorizeTooltip = true;
+				$("#colorizeTooltip").show();
 			})
 			$(".ru-toggle").mouseout(function(){
-				colorize_tooltip = false;
-				setTimeout(function(){ $("#colorize_tooltip").hide(); }, 1000);
+				colorizeTooltip = false;
+				setTimeout(function(){
+					if(!colorizeTooltip){
+						$("#colorizeTooltip").hide();
+					}
+				}, 1000);
 			})
 
-			$("#colorize_tooltip").mouseover(function(){
+			$("#colorizeTooltip").mouseover(function(){
 				console.log("tooltip mousedover");
-				colorize_tooltip = true;
-				$("#colorize_tooltip").stop();
-				$("#colorize_tooltip").show();
+				colorizeTooltip = true;
+				$("#colorizeTooltip").stop();
 			})
-			$("#colorize_tooltip").mouseout(function(){
+			$("#colorizeTooltip").mouseout(function(){
 				console.log("tooltip mousedout");
-				colorize_tooltip = false;
-				$("#colorize_tooltip").stop();
-				setTimeout(function(){ $("#colorize_tooltip").hide(); }, 1000);
+				colorizeTooltip = false;
+				setTimeout(function(){
+					if(!colorizeTooltip){
+						$("#colorizeTooltip").hide();
+					}
+				}, 1000);
 			})
 
 			$("#colorsafe").change(function(){
 				console.log("colorsafe clicked");
 				if(this.checked){
-					color_safe = true;
+					colorSafe = true;
 				} else {
-					color_safe = false;
+					colorSafe = false;
 				}
 				toggleColorSafe();
 			})
     }
 
 		function toggleColorization(){
-      if($(this).data("colorize") == true){
-        $(this).data("colorize", false);
+			if(colorize){
 				colorize = false;
-        $( "span[property='sioc:content']" ).html(raw_content_wrapped);
+				swapNodes("raw");
 				$(".ru-toggle").css({"opacity": ".25"});
       } else {
-        $(this).data("colorize", true);
 				colorize = true;
-        $( "span[property='sioc:content']" ).html(colorized_content);
+				swapNodes("processed");
 				$(".ru-toggle").css({"opacity": ".75"});
       }
 		}
 
 		function toggleColorSafe(){
 			console.log("colorsafe!")
-			let words = $(".word", ".wordlevel1", ".wordlevel2", ".wordlevel3", ".wordlevel4", ".wordlevel5", ".wordlevel6", "[data-level='1E']", "[data-level='2I']", "[data-level='3A']", "[data-level='3AU']", "[data-level='4S']", "[data-level='4SU']", "[data-level=5U']", "[data-level='6U']");
-			console.log(words);
-			if(color_safe){
-				words.each(function(word){
-					word.addClass("colorSafe");
+			let words = document.querySelectorAll('[data-level="1E"], [data-level="2I"], [data-level="3A"], [data-level="3AU"], [data-level="4S"], [data-level="4SU"], [data-level="5U"], [data-level="6U"], .word, .wordlevel1, .wordlevel2, .wordlevel3, .wordlevel4, .wordlevel5, .wordlevel6');
+			if(colorSafe){
+				words.forEach(function(word){
+					word.classList.add("colorSafe");
 				})
 			} else {
-				words.each(function(word){
-					word.removeClass("colorSafe");
+				words.forEach(function(word){
+					word.classList.remove("colorSafe");
 				})
 			}
-
 		}
-
 
 	})
 });
