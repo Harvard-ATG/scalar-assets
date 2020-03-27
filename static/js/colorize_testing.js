@@ -4,7 +4,6 @@
 
 	function colorize_elements(elements, params={}){
 		const api = new ApiClient();
-		// params['attribute'] = "data";
 		return api.colorize_elements(elements, params).then((res) => {
 			return res;
 		});
@@ -148,20 +147,26 @@ $( document ).ready( function() {
 			})
 			$(".ru-toggle").mouseout(function(){
 				colorizeTooltip = false;
-				setTimeout(function(){ $("#colorizeTooltip").hide(); }, 1000);
+				setTimeout(function(){
+					if(!colorizeTooltip){
+						$("#colorizeTooltip").hide();
+					}
+				}, 1000);
 			})
 
 			$("#colorizeTooltip").mouseover(function(){
 				console.log("tooltip mousedover");
 				colorizeTooltip = true;
 				$("#colorizeTooltip").stop();
-				$("#colorizeTooltip").show();
 			})
 			$("#colorizeTooltip").mouseout(function(){
 				console.log("tooltip mousedout");
 				colorizeTooltip = false;
-				$("#colorizeTooltip").stop();
-				setTimeout(function(){ $("#colorizeTooltip").hide(); }, 1000);
+				setTimeout(function(){
+					if(!colorizeTooltip){
+						$("#colorizeTooltip").hide();
+					}
+				}, 1000);
 			})
 
 			$("#colorsafe").change(function(){
@@ -176,14 +181,11 @@ $( document ).ready( function() {
     }
 
 		function toggleColorization(){
-      // if($(this).data("colorize") == true){
-      //   $(this).data("colorize", false);
 			if(colorize){
 				colorize = false;
 				swapNodes("raw");
 				$(".ru-toggle").css({"opacity": ".25"});
       } else {
-        // $(this).data("colorize", true);
 				colorize = true;
 				swapNodes("processed");
 				$(".ru-toggle").css({"opacity": ".75"});
