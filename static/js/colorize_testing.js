@@ -14,7 +14,7 @@ $( document ).ready( function() {
 		var pageUrl = window.location.origin + window.location.pathname;
 		var pageSlug = window.location.pathname.split("/").pop();
 		let colorize = true;
-		//let language = getLanguage(pageUrl);
+		let language = false;
 		let colorSafe = false;
 		let colorizeTooltip = false;
 		window.parsed_text = {
@@ -24,29 +24,7 @@ $( document ).ready( function() {
 			}
 		}
 
-		let language = getLanguage2(pageUrl)
-			.then(main());
-
-		//main();
-
-		function getLanguage(url){
-			var scalar_api_json_uri = url + ".rdfjson";
-			$.getJSON(scalar_api_json_uri, function(data){
-				let latest = data[url]["http://scalar.usc.edu/2012/01/scalar-ns#version"][0].value;
-				let node = data[latest];
-				try {
-					var lang = node["http://purl.org/dc/terms/language"][0].value;
-					console.log(lang);
-				}
-				catch(err){
-					console.log("No language set at dcterms:language metadata");
-					var lang = false;
-				}
-				return lang ? lang : null;
-			});
-		}
-
-		function getLanguage2(url){
+		function setLanguage(url){
 			var scalar_api_json_uri = url + ".rdfjson";
 			return new Promise(function(resolve, reject){
 				$.getJSON(scalar_api_json_uri, function(data){
@@ -54,11 +32,11 @@ $( document ).ready( function() {
 					let node = data[latest];
 					try {
 						var lang = node["http://purl.org/dc/terms/language"][0].value;
-						console.log(lang);
+						language = lang;
 					}
 					catch(err){
 						console.log("No language set at dcterms:language metadata");
-						var lang = false;
+						language = null;
 					}
 					resolve(lang ? lang : null);
 				});
@@ -231,6 +209,9 @@ $( document ).ready( function() {
 				})
 			}
 		}
+
+		setLanguage(pageUrl)
+			.then(main());
 
 	})
 });
