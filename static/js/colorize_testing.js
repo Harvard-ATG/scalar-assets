@@ -129,7 +129,7 @@ $( document ).ready( function() {
 
 		function main(){
 			console.log("main running");
-			console.log(getLanguage2(pageUrl));
+			console.log(language);
 
 			if(language !== "English"){
 				var bodyCopies = document.querySelectorAll(".body_copy");
