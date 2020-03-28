@@ -11,10 +11,10 @@
 
 $( document ).ready( function() {
 	$('body').on('pageLoadComplete',function() {
-		var page_url = window.location.origin + window.location.pathname;
+		var pageUrl = window.location.origin + window.location.pathname;
 		var pageSlug = window.location.pathname.split("/").pop();
 		let colorize = true;
-		let language = getLanguage(page_url);
+		//let language = getLanguage(pageUrl);
 		let colorSafe = false;
 		let colorizeTooltip = false;
 		window.parsed_text = {
@@ -24,7 +24,7 @@ $( document ).ready( function() {
 			}
 		}
 
-		getLanguage2(pageUrl)
+		let language = getLanguage2(pageUrl)
 			.then(main());
 
 		//main();
