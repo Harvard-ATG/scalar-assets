@@ -24,6 +24,11 @@ $( document ).ready( function() {
 			}
 		}
 
+		getLanguage2(pageUrl)
+			.then(main());
+
+		//main();
+
 		function getLanguage(url){
 			var scalar_api_json_uri = url + ".rdfjson";
 			$.getJSON(scalar_api_json_uri, function(data){
@@ -39,6 +44,26 @@ $( document ).ready( function() {
 				}
 				return lang ? lang : null;
 			});
+		}
+
+		function getLanguage2(url){
+			var scalar_api_json_uri = url + ".rdfjson";
+			return new Promise(function(resolve, reject){
+				$.getJSON(scalar_api_json_uri, function(data){
+					let latest = data[url]["http://scalar.usc.edu/2012/01/scalar-ns#version"][0].value;
+					let node = data[latest];
+					try {
+						var lang = node["http://purl.org/dc/terms/language"][0].value;
+						console.log(lang);
+					}
+					catch(err){
+						console.log("No language set at dcterms:language metadata");
+						var lang = false;
+					}
+					resolve(lang ? lang : null);
+				});
+			})
+
 		}
 
 		function getTextNodes(parent){
@@ -104,6 +129,7 @@ $( document ).ready( function() {
 
 		function main(){
 			console.log("main running");
+			console.log(getLanguage2(pageUrl));
 
 			if(language !== "English"){
 				var bodyCopies = document.querySelectorAll(".body_copy");
@@ -205,8 +231,6 @@ $( document ).ready( function() {
 				})
 			}
 		}
-
-		main();
 
 	})
 });
