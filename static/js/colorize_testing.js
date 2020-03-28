@@ -33,6 +33,7 @@ $( document ).ready( function() {
 					try {
 						var lang = node["http://purl.org/dc/terms/language"][0].value;
 						language = lang;
+						console.log(language);
 					}
 					catch(err){
 						console.log("No language set at dcterms:language metadata");
