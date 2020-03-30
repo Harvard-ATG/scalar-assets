@@ -34,3 +34,10 @@
 #colorize-tooltop {
   display:none;
 }
+
+.vertical-line {
+    line-height: 28px;
+}
+.small {
+  font-variant: small-caps;
+}
