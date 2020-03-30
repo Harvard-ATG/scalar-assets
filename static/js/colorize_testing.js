@@ -24,27 +24,25 @@ $( document ).ready( function() {
 			}
 		}
 
-		function setLanguage(url){
+		var setLanguage = function(url){
 			var scalar_api_json_uri = url + ".rdfjson";
 			return new Promise(function(resolve, reject){
 				$.getJSON(scalar_api_json_uri, function(data){
 					let latest = data[url]["http://scalar.usc.edu/2012/01/scalar-ns#version"][0].value;
 					let node = data[latest];
 					try {
-						var lang = node["http://purl.org/dc/terms/language"][0].value;
-						language = lang;
+						language = node["http://purl.org/dc/terms/language"][0].value;
 						console.log(language);
-            resolve(language);
+						resolve(language);
 					}
 					catch(err){
 						console.log("No language set at dcterms:language metadata");
 						language = null;
-            resolve(language);
+						resolve(language);
 					}
 
 				});
 			})
-
 		}
 
 		function getTextNodes(parent){
@@ -214,7 +212,7 @@ $( document ).ready( function() {
 		}
 
 		setLanguage(pageUrl)
-			.then(main());
+			.then(main())
 
 	})
 });
