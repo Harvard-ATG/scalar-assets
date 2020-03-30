@@ -11,10 +11,10 @@
 
 $( document ).ready( function() {
 	$('body').on('pageLoadComplete',function() {
-		var page_url = window.location.origin + window.location.pathname;
+		var pageUrl = window.location.origin + window.location.pathname;
 		var pageSlug = window.location.pathname.split("/").pop();
 		let colorize = true;
-		let language = getLanguage(page_url);
+		let language = false;
 		let colorSafe = false;
 		let colorizeTooltip = false;
 		window.parsed_text = {
@@ -24,23 +24,24 @@ $( document ).ready( function() {
 			}
 		}
 
-		main();
-
-		function getLanguage(url){
+		var setLanguage = function(url){
 			var scalar_api_json_uri = url + ".rdfjson";
-			$.getJSON(scalar_api_json_uri, function(data){
-				let latest = data[url]["http://scalar.usc.edu/2012/01/scalar-ns#version"][0].value;
-				let node = data[latest];
-				try {
-					var lang = node["http://purl.org/dc/terms/language"][0].value;
-					console.log(lang);
-				}
-				catch(err){
-					console.log("No language set at dcterms:language metadata");
-					var lang = false;
-				}
-				return lang ? lang : null;
-			});
+			return new Promise(function(resolve, reject){
+				$.getJSON(scalar_api_json_uri, function(data){
+					let latest = data[url]["http://scalar.usc.edu/2012/01/scalar-ns#version"][0].value;
+					let node = data[latest];
+					try {
+						language = node["http://purl.org/dc/terms/language"][0].value;
+						resolve(language);
+					}
+					catch(err){
+						console.log("No language set at dcterms:language metadata");
+						language = null;
+						resolve(language);
+					}
+
+				});
+			})
 		}
 
 		function getTextNodes(parent){
@@ -98,7 +99,6 @@ $( document ).ready( function() {
 		}
 
 		function swapNodes(source="processed"){
-			console.log("swapping nodes");
 			for(var key in parsed_text[source]){
 				replaceTextNode(key, source);
 			}
@@ -109,7 +109,6 @@ $( document ).ready( function() {
 
 			if(language !== "English"){
 				var bodyCopies = document.querySelectorAll(".body_copy");
-
 				function getNodes(item){
 					return new Promise((resolve, reject) => {
 						resolve(getTextNodes(item));
@@ -117,11 +116,9 @@ $( document ).ready( function() {
 				}
 				let promiseArray = Array.from(bodyCopies).map(getNodes);
 				Promise.all(promiseArray).then(results => {
-					console.log("all promises finshed");
 					var payload = {
 						"elements": parsed_text['raw']
 					}
-					console.log(payload);
 					colorize_elements(payload).then(function(response){
 						window.parsed_text['processed'] = response['data']['elements'];
 						if(colorize){
@@ -157,12 +154,10 @@ $( document ).ready( function() {
 			})
 
 			$("#colorizeTooltip").mouseover(function(){
-				console.log("tooltip mousedover");
 				colorizeTooltip = true;
 				$("#colorizeTooltip").stop();
 			})
 			$("#colorizeTooltip").mouseout(function(){
-				console.log("tooltip mousedout");
 				colorizeTooltip = false;
 				setTimeout(function(){
 					if(!colorizeTooltip){
@@ -172,7 +167,6 @@ $( document ).ready( function() {
 			})
 
 			$("#colorsafe").change(function(){
-				console.log("colorsafe clicked");
 				if(this.checked){
 					colorSafe = true;
 				} else {
@@ -195,7 +189,6 @@ $( document ).ready( function() {
 		}
 
 		function toggleColorSafe(){
-			console.log("colorsafe!")
 			let words = document.querySelectorAll('[data-level="1E"], [data-level="2I"], [data-level="3A"], [data-level="3AU"], [data-level="4S"], [data-level="4SU"], [data-level="5U"], [data-level="6U"], .word, .wordlevel1, .wordlevel2, .wordlevel3, .wordlevel4, .wordlevel5, .wordlevel6');
 			if(colorSafe){
 				words.forEach(function(word){
@@ -207,6 +200,11 @@ $( document ).ready( function() {
 				})
 			}
 		}
+
+		setLanguage(pageUrl)
+			.then(function(){
+				main();
+			})
 
 	})
 });

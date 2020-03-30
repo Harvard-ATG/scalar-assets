@@ -32,7 +32,6 @@ $( document ).ready( function() {
 					let node = data[latest];
 					try {
 						language = node["http://purl.org/dc/terms/language"][0].value;
-						console.log(language);
 						resolve(language);
 					}
 					catch(err){
@@ -100,7 +99,7 @@ $( document ).ready( function() {
 		}
 
 		function swapNodes(source="processed"){
-			console.log("swapping nodes");
+			//console.log("swapping nodes");
 			for(var key in parsed_text[source]){
 				replaceTextNode(key, source);
 			}
@@ -108,11 +107,9 @@ $( document ).ready( function() {
 
 		function main(){
 			console.log("main running");
-			console.log(language);
 
 			if(language !== "English"){
 				var bodyCopies = document.querySelectorAll(".body_copy");
-
 				function getNodes(item){
 					return new Promise((resolve, reject) => {
 						resolve(getTextNodes(item));
@@ -120,11 +117,11 @@ $( document ).ready( function() {
 				}
 				let promiseArray = Array.from(bodyCopies).map(getNodes);
 				Promise.all(promiseArray).then(results => {
-					console.log("all promises finshed");
+					// console.log("all promises finshed");
 					var payload = {
 						"elements": parsed_text['raw']
 					}
-					console.log(payload);
+					//console.log(payload);
 					colorize_elements(payload).then(function(response){
 						window.parsed_text['processed'] = response['data']['elements'];
 						if(colorize){
@@ -160,12 +157,12 @@ $( document ).ready( function() {
 			})
 
 			$("#colorizeTooltip").mouseover(function(){
-				console.log("tooltip mousedover");
+				// console.log("tooltip mousedover");
 				colorizeTooltip = true;
 				$("#colorizeTooltip").stop();
 			})
 			$("#colorizeTooltip").mouseout(function(){
-				console.log("tooltip mousedout");
+				// console.log("tooltip mousedout");
 				colorizeTooltip = false;
 				setTimeout(function(){
 					if(!colorizeTooltip){
@@ -175,7 +172,7 @@ $( document ).ready( function() {
 			})
 
 			$("#colorsafe").change(function(){
-				console.log("colorsafe clicked");
+				// console.log("colorsafe clicked");
 				if(this.checked){
 					colorSafe = true;
 				} else {
@@ -198,7 +195,7 @@ $( document ).ready( function() {
 		}
 
 		function toggleColorSafe(){
-			console.log("colorsafe!")
+			// console.log("colorsafe!")
 			let words = document.querySelectorAll('[data-level="1E"], [data-level="2I"], [data-level="3A"], [data-level="3AU"], [data-level="4S"], [data-level="4SU"], [data-level="5U"], [data-level="6U"], .word, .wordlevel1, .wordlevel2, .wordlevel3, .wordlevel4, .wordlevel5, .wordlevel6');
 			if(colorSafe){
 				words.forEach(function(word){
