@@ -34,12 +34,14 @@ $( document ).ready( function() {
 						var lang = node["http://purl.org/dc/terms/language"][0].value;
 						language = lang;
 						console.log(language);
+            resolve(language);
 					}
 					catch(err){
 						console.log("No language set at dcterms:language metadata");
 						language = null;
+            resolve(language);
 					}
-					resolve(lang ? lang : null);
+
 				});
 			})
 
