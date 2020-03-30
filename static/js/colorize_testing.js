@@ -212,7 +212,9 @@ $( document ).ready( function() {
 		}
 
 		setLanguage(pageUrl)
-			.then(main())
+			.then(function(){
+				main();
+			})
 
 	})
 });
